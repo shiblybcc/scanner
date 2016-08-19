@@ -4,11 +4,11 @@ import com.example.domain.ScannedFile;
 import com.example.domain.User;
 import com.example.repository.ScannedFileRepository;
 import com.example.repository.UserRepository;
-import com.example.service.UserService;
 import com.example.view.ScannedFileView;
 import com.example.view.UserView;
 import org.apache.commons.codec.DecoderException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 
@@ -30,33 +30,38 @@ import java.util.List;
 @ViewScoped
 public class UserBean {
 
-//    @ManagedProperty(value = "#{user}")
-//    private UserView user;
-//
-//    @ManagedProperty(value = "#{userRepository}")
-//    UserRepository userRepository;
+    @ManagedProperty(value = "#{user}")
+    private UserView user;
+
+    @ManagedProperty(value = "#{userRepository}")
+    UserRepository userRepository;
 
     @Autowired
-    UserService userService;
+    private PasswordEncoder passwordEncoder;
 
-//    public String register(){
-//        User created = new User();
-//        created.setId(this.user.getId());
-//        created.setFirstName(this.user.getFirstName());
-//        created.setLastName(this.user.getLastName());
-//        created.setUsername(this.user.getUsername());
-//        created.setPassword(this.user.getPassword());
-//        User newUser = this.userRepository.save(created);
-//        return "login.xhtml";
-//    }
+//    @Autowired
+//    UserService userService;
 
-    public String register(@Valid User user,
-                           BindingResult result, ModelMap model){
-
-        userService.save(user);
-
+    public String register(){
+        User created = new User();
+        created.setId(this.user.getId());
+        created.setFirstName(this.user.getFirstName());
+        created.setLastName(this.user.getLastName());
+        created.setUsername(this.user.getUsername());
+        created.setPassword((this.user.getPassword()));
+//        created.setPassword(passwordEncoder.encode(this.user.getPassword()));
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User newUser = this.userRepository.save(created);
         return "login.xhtml";
     }
+
+//    public String register(@Valid User user,
+//                           BindingResult result, ModelMap model){
+//
+//        userService.save(user);
+//
+//        return "login.xhtml";
+//    }
 
 //    public void findFileById() throws GeneralSecurityException, DecoderException, IOException {
 //        User found = userRepository.findOne(this.user.getId());
@@ -118,19 +123,27 @@ public class UserBean {
     }
 
 
-//    public UserView getUser() {
-//        return user;
+    public UserView getUser() {
+        return user;
+    }
+
+    public void setUser(UserView user) {
+        this.user = user;
+    }
+
+//    public UserService getUserService() {
+//        return userService;
 //    }
 //
-//    public void setUser(UserView user) {
-//        this.user = user;
+//    public void setUserService(UserService userService) {
+//        this.userService = userService;
 //    }
-//
-//    public UserRepository getUserRepository() {
-//        return userRepository;
-//    }
-//
-//    public void setUserRepository(UserRepository userRepository) {
-//        this.userRepository = userRepository;
-//    }
+
+        public UserRepository getUserRepository() {
+        return userRepository;
+    }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 }
