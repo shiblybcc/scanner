@@ -3,11 +3,13 @@ package com.example.controller;
 
 import com.example.domain.FileEncryption;
 import com.example.domain.ScannedFile;
+import com.example.domain.User;
 import com.example.repository.ScannedFileRepository;
 import com.example.view.ScannedFileView;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.io.IOUtils;
 import org.apache.myfaces.custom.fileupload.UploadedFile;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -214,4 +216,5 @@ public class FileUploadBean {
     public void setScannedFileRepository(ScannedFileRepository scannedFileRepository) {
         this.scannedFileRepository = scannedFileRepository;
     }
+
 }

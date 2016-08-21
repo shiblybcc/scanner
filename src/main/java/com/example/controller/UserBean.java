@@ -8,6 +8,7 @@ import com.example.view.ScannedFileView;
 import com.example.view.UserView;
 import org.apache.commons.codec.DecoderException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -36,9 +37,6 @@ public class UserBean {
     @ManagedProperty(value = "#{userRepository}")
     UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
 //    @Autowired
 //    UserService userService;
 
@@ -48,11 +46,16 @@ public class UserBean {
         created.setFirstName(this.user.getFirstName());
         created.setLastName(this.user.getLastName());
         created.setUsername(this.user.getUsername());
-        created.setPassword((this.user.getPassword()));
-//        created.setPassword(passwordEncoder.encode(this.user.getPassword()));
+        created.setOriginalPassword(this.user.getPassword());
+//        created.setPassword((this.user.getPassword()));
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(this.user.getPassword());
+        created.setPassword(hashedPassword);
+
 //        user.setPassword(passwordEncoder.encode(user.getPassword()));
         User newUser = this.userRepository.save(created);
-        return "login.xhtml";
+        return "login.xhtml?faces-redirect=true";
     }
 
 //    public String register(@Valid User user,
@@ -71,18 +74,20 @@ public class UserBean {
 //        this.user.setLastName(found.getLastName());
 //    }
 //
-//    public List<UserView> findAllUsers() {
-//        List<UserView> users = new ArrayList<>();
-//        for (User entity : this.userRepository.findAll()) {
-//            UserView view = new UserView();
-//            view.setId(entity.getId());
-//            view.setUsername(entity.getUsername());
-//            view.setFirstName(entity.getFirstName());
-//            view.setLastName(entity.getLastName());
-//            users.add(view);
-//        }
-//        return users;
-//    }
+    public List<UserView> findAllUsers() {
+        List<UserView> users = new ArrayList<>();
+        for (User entity : this.userRepository.findAll()) {
+            UserView view = new UserView();
+            view.setId(entity.getId());
+            view.setUsername(entity.getUsername());
+            view.setFirstName(entity.getFirstName());
+            view.setLastName(entity.getLastName());
+            view.setOriginalPassword(entity.getOriginalPassword());
+            view.setPassword(entity.getPassword());
+            users.add(view);
+        }
+        return users;
+    }
 
 
     public void validatePassword(ComponentSystemEvent event) {

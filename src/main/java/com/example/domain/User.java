@@ -21,6 +21,16 @@ public class User {
     @Column(nullable = true)
     private String password;
 
+    @Column(nullable = true)
+    private String originalPassword;
+
+    public String getOriginalPassword() {
+        return originalPassword;
+    }
+
+    public void setOriginalPassword(String originalPassword) {
+        this.originalPassword = originalPassword;
+    }
 
     public Long getId() {
         return id;

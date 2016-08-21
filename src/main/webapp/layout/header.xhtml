@@ -17,14 +17,13 @@
                         <ul>
                             <li><h:link value="Files" outcome="file" /></li>
                             <li>
-                                <c:if test="#{currentUser != null}">
-                                    <h:form>
-                                        <h:commandLink action="#{loginBean.logout()}" value="Logout" />
-                                    </h:form>
-                                </c:if>
-                                <c:if test="#{currentUser == null}">
                                     <h:link value="Login" outcome="login" />
-                                </c:if>
+                                    <h:link value="Register" outcome="register" />
+                                    <h:link value="Users" outcome="users" />
+
+                            </li>
+                            <li>
+
                             </li>
                         </ul>
                     </nav>
